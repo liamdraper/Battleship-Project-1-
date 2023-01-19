@@ -1,0 +1,41 @@
+/* * {
+    box-sizing: border-box;
+} */
+
+
+body {
+    height: 100vh;
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  
+}
+
+#ai-board {
+    display: grid;
+    grid-template-columns: repeat(10, 5vmin);
+    grid-template-rows: repeat(10, 5vmin);
+    gap: 1vmin;
+  }
+
+  #ai-board > div {
+    border: 1vmin solid grey;
+  }
+
+  #player-board {
+    display: grid;
+    grid-template-columns: repeat(10, 5vmin);
+    grid-template-rows: repeat(10, 5vmin);
+    gap: 1vmin;
+  }
+
+  #player-board > div {
+    border: 1vmin solid grey;
+  }

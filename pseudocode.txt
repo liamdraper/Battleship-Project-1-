@@ -1,0 +1,14 @@
+1. Define constants: 
+    1. Create shotMarkers object
+2. Define state variables
+    1. 2 2-Dimensional arrays to represent each side of the board
+    2. Turn: 1 (player) / -1 (AI)
+    3. Winner: 1 (player) / -1 (AI)
+    4. Squares hit variable for player and AI set to 0; (max is 17)
+3. Define cached elements
+4. Upon loading the app should:
+    1. Initialize state variables
+    2. Render page
+    3. Wait for player to click a square
+5. Handle player clicking a square
+6. Handle a player clicking the replay button
