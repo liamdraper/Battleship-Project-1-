@@ -15,27 +15,28 @@ body {
 main {
   display: flex;
   flex-direction: row;
-  
 }
 
-#ai-board {
+#player-board {
     display: grid;
     grid-template-columns: repeat(10, 5vmin);
     grid-template-rows: repeat(10, 5vmin);
-    gap: 1vmin;
-  }
-
-  #ai-board > div {
-    border: 1vmin solid grey;
-  }
-
-  #player-board {
-    display: grid;
-    grid-template-columns: repeat(10, 5vmin);
-    grid-template-rows: repeat(10, 5vmin);
-    gap: 1vmin;
+    margin-right: 5vmin;
+    background-color: rgba(0, 0, 225, 0.6);
   }
 
   #player-board > div {
-    border: 1vmin solid grey;
+    border: .1vmin solid black;
+  }
+
+  #ai-board {
+    display: grid;
+    grid-template-columns: repeat(10, 5vmin);
+    grid-template-rows: repeat(10, 5vmin);
+    margin-left: 5vmin;
+    background-color: rgba(255, 0, 0, 0.6);
+  }
+
+  #ai-board > div {
+    border: .1vmin solid black;
   }
