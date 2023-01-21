@@ -1,6 +1,6 @@
-/* * {
+* {
     box-sizing: border-box;
-} */
+}
 
 
 body {
@@ -12,6 +12,11 @@ body {
     align-items: center;
 }
 
+header {
+  font-size: 8vmin;
+}
+
+
 main {
   display: flex;
   flex-direction: row;
@@ -22,7 +27,7 @@ main {
     grid-template-columns: repeat(10, 5vmin);
     grid-template-rows: repeat(10, 5vmin);
     margin-right: 5vmin;
-    background-color: rgba(0, 0, 225, 0.6);
+    background-color: rgba(0, 50, 225, 0.6);
   }
 
   #player-board > div {
@@ -39,4 +44,22 @@ main {
 
   #ai-board > div {
     border: .1vmin solid black;
+  }
+
+  /* .red-dot {
+    border-radius: 50%;
+    background-color: red;
+    height: 5px;
+    width: 5px;
+  }
+
+  .black-dot {
+    border-radius: 50%;
+    background-color: black;
+    height: 5px;
+    width: 5px;
+  } */
+
+  section > div:hover {
+    border: .1vmin solid red;
   }

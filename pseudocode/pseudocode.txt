@@ -1,7 +1,7 @@
 1. Define constants: 
     1. Create shotMarkers object
 2. Define state variables
-    1. 2 2-Dimensional arrays to represent each side of the board (null for empty squares, 1 for hit, -1 for miss)
+    1. 2 2-Dimensional arrays to represent each side of the board (null for empty squares, m for miss hits, s for ship, h for hit)
     2. Turn: 1 (player) / -1 (AI)
     3. Winner: 1 (player) / -1 (AI)
     4. Squares hit variable for player and AI set to 0; (max is 17)
@@ -13,7 +13,13 @@
     3. Wait for player to click a square
 5. Handle player clicking a square
     1. Changes board value, depending on hit or miss
+    2. If player hits, add to win score
 6. AI chooses random square
-    1. If previous move hits, will attack adjacent squares
+    1. Wait 3 seconds
+    2. If previous move hits, will attack adjacent squares
+    3. If AI hits, add to win score
 7. Handle a player clicking the replay button
     1.board is cleared and state variables are reset
+
+
+Icebox:
