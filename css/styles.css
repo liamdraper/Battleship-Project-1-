@@ -27,7 +27,7 @@ main {
     grid-template-columns: repeat(10, 5vmin);
     grid-template-rows: repeat(10, 5vmin);
     margin-right: 5vmin;
-    background-color: rgba(0, 50, 225, 0.6);
+    background-color: #42a4f5;
   }
 
   #player-board > div {
@@ -63,3 +63,4 @@ main {
   section > div:hover {
     border: .1vmin solid red;
   }
+
