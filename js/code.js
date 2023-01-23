@@ -1,6 +1,6 @@
 /*----- constants -----*/
 const markers = {
-    null: '#',
+    null: '',
     m: 'o',
     s: '-',
     h: 'x'
@@ -24,7 +24,7 @@ const ships_length = {
 }
 
 /*----- state variables -----*/
-let playerShipCount, aiShipCount, turn, winner, playerBoard, aiBoard, gameStart, shipsPlaced;
+let playerShipCount, aiShipCount, turn, winner, playerBoard, aiBoard, gameStart, shipsPlaced, aiLastMove, lastMoveIsHit, adjMoveCount;
 
 /*----- cached elements  -----*/
 const playAgnBtn = document.querySelector('button');
@@ -71,6 +71,9 @@ function init() {
     aiShipCount = 17;
     gameStart = true;
     shipsPlaced = 0;
+    lastMoveIsHit = false;
+    aiLastMove = [0, 0];
+    adjMoveCount = 0;
     //playerChoosesShips()
     //aiChoosesShips();
     render();
@@ -217,28 +220,18 @@ function handleChooseShips(e) {
 
 function handleMove(e) {
     //Player chooses a square to attack
-    //obtain ai board index
-    // let shot = aiBoard[parseInt(square.id[1])][parseInt(square.id[3])];
-    // if (shot === null) aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'm';
-    // else if (shot === 's') {
-    //     aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'h'};
-    //     aiShipCount-= 1;
-    //     console.log(aiShipCount);
-    //Breaks out of loop if miss or hit square is targeted - doesnt allow player to pick new square
     let shot;
-    while (shot !== 'm' || shot !== 'h') {
-        const square = e.target
-        shot = aiBoard[parseInt(square.id[1])][parseInt(square.id[3])];
-        console.log(shot);
-        if (shot === null) {
-            aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'm';
-            break;
-        }
-        else if (shot === 's') {
-            aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'h';
-            aiShipCount-= 1;
-            break;
-        }
+    const square = e.target
+    shot = aiBoard[parseInt(square.id[1])][parseInt(square.id[3])];
+    if (shot == 'm' || shot == 'h') {
+        return;
+    }
+    else if (shot === null) {
+        aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'm';
+    }
+    else if (shot === 's') {
+        aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'h';
+        aiShipCount-= 1;
     } 
     turn *= -1;
     setTimeout(aiMove, 000);
@@ -248,23 +241,54 @@ function handleMove(e) {
 
 function aiMove() {
     //get random indexes for col and row arrays
-    const colIdx = Math.floor(Math.random() * 9);
-    const rowIdx = Math.floor(Math.random() * 9);
-    let shot;
-    while (shot !== 'm' && shot !== 'h') {
-        shot = playerBoard[colIdx][rowIdx];
-        if (shot === null) {
-            playerBoard[colIdx][rowIdx] = 'm';
-            break;
-        }
-        else if (shot === 's') {
-            playerBoard[colIdx][rowIdx] = 'h';
-            playerShipCount-= 1;
-            break;
-        }
-        continue;
+    let shot, colIdx, rowIdx, randAdjShot;
+    const randColIdx = Math.floor(Math.random() * 9);
+    const randRowIdx = Math.floor(Math.random() * 9);
+    //ai will shoot at adjacent squares if their last move was a hit
+    if (adjMoveCount === 4) lastMoveIsHit = false;
+    if (lastMoveIsHit === true) {
+        //random adjacent shots in four directions
+        const randMoves = [
+            [aiLastMove[0]+1, aiLastMove[1]], 
+            [aiLastMove[0], aiLastMove[1]+1],
+            [aiLastMove[0]-1, aiLastMove[1]],
+            [aiLastMove[0], aiLastMove[1]-1]
+        ]
+        // const horShotRight = playerBoard[aiLastMove[0]+1][aiLastMove[1]];
+        // const vertShotUp = playerBoard[aiLastMove[0]][aiLastMove[1]+1];
+        // const horShotLeft = playerBoard[aiLastMove[0]+1][aiLastMove[1]];
+        // const vertShotDown = playerBoard[aiLastMove[0]][aiLastMove[1]+1];
+        randAdjShot = randMoves[Math.floor(Math.random() * 4)];
+        colIdx = randAdjShot[0];
+        //horizonal guard
+        if (colIdx === -1) colIdx = 0
+        if (colIdx === 10) colIdx = 9
+        rowIdx = randAdjShot[1];
+        //vertical guard
+        if (rowIdx === -1) rowIdx = 0
+        if (rowIdx === 10) rowIdx = 9
+        adjMoveCount++;
     }
-    //not rendering board until another click is done
+    else {
+        colIdx = randColIdx;
+        rowIdx = randRowIdx;
+    }
+    shot = playerBoard[colIdx][rowIdx];
+    if (shot === 'm' || shot === 'h') {
+        return aiMove();
+    }    
+    else if (shot === null) {
+        playerBoard[colIdx][rowIdx] = 'm';
+    }
+    else if (shot === 's') {
+        playerBoard[colIdx][rowIdx] = 'h';
+        aiLastMove = [colIdx, rowIdx];
+        lastMoveIsHit = true;
+        adjMoveCount = 0;
+        playerShipCount-= 1;
+    }
+    console.log(playerShipCount)
+    render();
 }
     
 
