@@ -27,12 +27,14 @@ const ships_length = {
 let playerShipCount, aiShipCount, turn, winner, playerBoard, aiBoard, gameStart, shipsPlaced;
 
 /*----- cached elements  -----*/
+const playAgnBtn = document.querySelector('button');
 const messageDisplay = document.querySelector('h1');
 const playerBoardSquares = [...document.querySelectorAll('#player-board > div')];
 const aiBoardSquares = [...document.querySelectorAll('#ai-board > div')];
 
 /*----- event listeners -----*/
 document.getElementById('ai-board').addEventListener('click', handleMove);
+playAgnBtn.addEventListener('click', init);
 
 /*----- functions -----*/
 
@@ -71,7 +73,6 @@ function init() {
     shipsPlaced = 0;
     //playerChoosesShips()
     //aiChoosesShips();
-    getWinner();
     render();
 }
 
@@ -114,7 +115,7 @@ function renderMessage() {
 }
 
 function renderControls() {
-
+    playAgnBtn.style.visibility = winner ? 'visible' : 'hidden';
 }
 
 function playerChoosesShips() {
@@ -156,23 +157,27 @@ function aiChoosesShips() {
     const aiShips = [2, 3, 3, 4, 5];
     aiShips.forEach(function(ship) {
         //randomy chooses if alignment is vertical or horizontal
-        let vertAlign = Math.random() > 0.5 ? true : false;
+        let vertAlign// = Math.random() > 0.5 ? true : false;
         //random number between 0 and 9
         let randNum09 = Math.floor(Math.random() * 9)
         if (vertAlign) {
-
             //chooses random spaces to place ships 
             //Can't pick squares that arent null 
             const square = aiBoard[randNum09][randNum09];
             square = 's';
-            for (i=0;i<ship.length;i++) {
-
+            while (i<ship.length) {
+                if (square !== null) {
+                    console.log(square);
+                    i++;
+                }
+                else {
+                    continue;
+                }
             }
         }
         else {
 
         }
-        randSpot
     })
 
 };
@@ -213,23 +218,65 @@ function handleChooseShips(e) {
 function handleMove(e) {
     //Player chooses a square to attack
     //obtain ai board index
-    const square = e.target
-    let shot = aiBoard[parseInt(square.id[1])][parseInt(square.id[3])];
-    if (shot === null) aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'm';
-    else if (shot === 's') {
-        aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'h'};
-        aiShipCount-= 1;
-        console.log(aiShipCount);
+    // let shot = aiBoard[parseInt(square.id[1])][parseInt(square.id[3])];
+    // if (shot === null) aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'm';
+    // else if (shot === 's') {
+    //     aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'h'};
+    //     aiShipCount-= 1;
+    //     console.log(aiShipCount);
+    //Breaks out of loop if miss or hit square is targeted - doesnt allow player to pick new square
+    let shot;
+    while (shot !== 'm' || shot !== 'h') {
+        const square = e.target
+        shot = aiBoard[parseInt(square.id[1])][parseInt(square.id[3])];
+        console.log(shot);
+        if (shot === null) {
+            aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'm';
+            break;
+        }
+        else if (shot === 's') {
+            aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'h';
+            aiShipCount-= 1;
+            break;
+        }
+    } 
     turn *= -1;
+    setTimeout(aiMove, 000);
+    winner = getWinner();
     render();
 }
 
+function aiMove() {
+    //get random indexes for col and row arrays
+    const colIdx = Math.floor(Math.random() * 9);
+    const rowIdx = Math.floor(Math.random() * 9);
+    let shot;
+    while (shot !== 'm' && shot !== 'h') {
+        shot = playerBoard[colIdx][rowIdx];
+        if (shot === null) {
+            playerBoard[colIdx][rowIdx] = 'm';
+            break;
+        }
+        else if (shot === 's') {
+            playerBoard[colIdx][rowIdx] = 'h';
+            playerShipCount-= 1;
+            break;
+        }
+        continue;
+    }
+    //not rendering board until another click is done
+}
+    
+
+
 function getWinner() {
     if (aiShipCount === 0) {
-        return console.log('player has won')
+        console.log('player has won');
+        return winner = 1;
     }
     else if (playerShipCount === 0) {
         console.log('Ai has won')
+        return winner = -1;
     }
     else {
         return;

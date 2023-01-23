@@ -5,11 +5,12 @@
 
 body {
     height: 100vh;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Bebas Neue', cursive;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-image: url(https://opengameart.org/sites/default/files/Preview_143.png);
 }
 
 header {
