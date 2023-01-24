@@ -47,21 +47,42 @@ main {
     border: .1vmin solid black;
   }
 
-  /* .red-dot {
-    border-radius: 50%;
-    background-color: red;
-    height: 5px;
-    width: 5px;
+  .red-dot,
+  .white-dot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .black-dot {
-    border-radius: 50%;
-    background-color: black;
-    height: 5px;
-    width: 5px;
-  } */
+.red-dot::after, 
+.white-dot::after {
+  content: '';
+  position: absolute;
+  margin: auto;
+  border-radius: 100%;
+  width: 1.5vmin;
+  height: 1.5vmin;
+}
 
-  section > div:hover {
+.red-dot::after {
+    background-color: red;
+  }
+
+.white-dot::after {
+    background-color: white;
+  } 
+
+.ship {
+  background-color: grey;
+  }
+
+.empty {
+    content: '';
+  }
+
+  #ships > div:hover {
     border: .1vmin solid red;
   }
+
+
 
