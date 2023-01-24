@@ -12,8 +12,8 @@ const markers = {
 // }
 
 const messages = {
-    null : '.',
-    h : 'Hit!',
+    null: '.',
+    h: 'Hit!',
     m: 'Miss!',
     1: 'You win!',
     '-1': 'Computer wins!',
@@ -81,20 +81,20 @@ function init() {
     lastMoveIsHit = false;
     aiLastMove = [0, 0];
     adjMoveCount = 0;
-    //playerChoosesShips()
+    playerChoosesShips()
     aiChoosesShips();
     render();
 }
 
 function clearBoards() {
-    playerBoard.forEach(function(colArr, colIdx) {
-        colArr.forEach(function(cell, rowIdx) {
+    playerBoard.forEach(function (colArr, colIdx) {
+        colArr.forEach(function (cell, rowIdx) {
             const square = document.querySelector(`#player-board #c${colIdx}r${rowIdx}`);
             square.removeAttribute('class');
         });
     });
-    aiBoard.forEach(function(colArr, colIdx) {
-        colArr.forEach(function(cell, rowIdx) {
+    aiBoard.forEach(function (colArr, colIdx) {
+        colArr.forEach(function (cell, rowIdx) {
             const square = document.querySelector(`#ai-board #c${colIdx}r${rowIdx}`);
             square.removeAttribute('class');
         });
@@ -110,8 +110,8 @@ function render() {
 
 //Put these into one function?
 function renderPlayerBoard() {
-    playerBoard.forEach(function(colArr, colIdx) {
-        colArr.forEach(function(cell, rowIdx) {
+    playerBoard.forEach(function (colArr, colIdx) {
+        colArr.forEach(function (cell, rowIdx) {
             const square = document.querySelector(`#player-board #c${colIdx}r${rowIdx}`);
             //square.innerText = `${markers[cell]}`
             square.classList.add(`${markers[cell]}`);
@@ -120,8 +120,8 @@ function renderPlayerBoard() {
 }
 
 function renderAiBoard() {
-    aiBoard.forEach(function(colArr, colIdx) {
-        colArr.forEach(function(cell, rowIdx) {
+    aiBoard.forEach(function (colArr, colIdx) {
+        colArr.forEach(function (cell, rowIdx) {
             const square = document.querySelector(`#ai-board #c${colIdx}r${rowIdx}`);
             square.classList.add(`${markers[cell]}`)
             //hides ships until they are hit
@@ -158,8 +158,8 @@ function playerChoosesShips() {
             //adds elements above and below to hover according to which ship is selected
             document.getElementById('player-board').addEventListener('mouseover', (e) => {
                 let square = e.target;
-                for (i=0; i<ships_length[ship.id]; i++) {
-                    document.getElementById(`c${square.id[1]}r${(parseInt(square.id[3]))+i}`).style.backgroundColor = "black";
+                for (i = 0; i < ships_length[ship.id]; i++) {
+                    document.getElementById(`c${square.id[1]}r${(parseInt(square.id[3])) + i}`).style.backgroundColor = "black";
                 }
             });
             //sets non-hovered divs back to background color
@@ -167,8 +167,8 @@ function playerChoosesShips() {
                 let square = e.target;
                 square.style.backgroundColor = '#42a4f5';
                 //Won't reset all squares
-                for (i=0; i<ships_length[ship.id]; i++) {
-                    document.getElementById(`c${square.id[1]}r${(parseInt(square.id[3]))+i}`).style.backgroundColor = "42a4f5";
+                for (i = 0; i < ships_length[ship.id]; i++) {
+                    document.getElementById(`c${square.id[1]}r${(parseInt(square.id[3])) + i}`).style.backgroundColor = "42a4f5";
                 }
             });
             //sets playerBoard value to 's'
@@ -184,43 +184,45 @@ function playerChoosesShips() {
 
 function aiChoosesShips() {
     const aiShips = [2, 3, 3, 4, 5];
-    aiShips.forEach(function place(ship) {
+    while (aiShips.length) {
+        const ship = aiShips.pop();
         //if (aiBoard.includes('s') === 17) return;
         //console.log(aiBoard.includes('s'));
 
         //randomy chooses if alignment is vertical or horizontal
-        //const vertAlign = Math.random() > 0.5 ? true : false;
-        const vertAlign = true;
+        const vertAlign = Math.random() > 0.5;
         //random number between 0 and 9
         //vertically align a ship
         //chooses random spaces to place ships
         //Can't pick squares that arent null
-        const colIdx = getRandomNumber09();
-        const rowIdx = getRandomNumber09();
+        const colIdx = getRandomBetween(0, 9);
+        const rowIdx = getRandomBetween(0, 9);
         const square = aiBoard[colIdx][rowIdx];
-        if (square === 's') return place();
         //aiBoard[colIdx][rowIdx] = 's'
         //console.log(square);
         //console.log(colIdx, rowIdx);
-        if (vertAlign === true) { 
-            for (i=0;i<ship;i++) {
-                const newRowIdx = rowIdx + i;
-                //console.log(colIdx, newRowIdx);
-                if (newRowIdx > 9 || aiBoard[colIdx][newRowIdx] === 's') return place();
-                aiBoard[colIdx][newRowIdx] = 's';
-                //console.log(aiBoard[colIdx][rowIdx+ i])
+        let validPlacement = true;
+        for (i = 0; i < ship; i++) {
+            const newRowIdx = vertAlign ? rowIdx + i : rowIdx;
+            const newColIdx = vertAlign ? colIdx : colIdx + i;
+            //console.log(colIdx, newRowIdx);
+            if (newRowIdx > 9 || newColIdx > 9 || aiBoard[newColIdx][newRowIdx] === 's') {
+                validPlacement = false;
+                break;
             }
+            //console.log(aiBoard[colIdx][rowIdx+ i])
         }
-        //horizonatally align a ship
-        else {
-            for (i=0;i<ship;i++) {
-                const newColIdx = colIdx + i;
-                if (newColIdx > 9 || aiBoard[newColIdx][rowIdx] === 's') return;
-                aiBoard[newColIdx][rowIdx] = 's';
-                //console.log(aiBoard[colIdx][rowIdx+ i])
+        if (validPlacement) {
+            for (i = 0; i < ship; i++) {
+                const newRowIdx = vertAlign ? rowIdx + i : rowIdx;
+                const newColIdx = vertAlign ? colIdx : colIdx + i;
+                aiBoard[newColIdx][newRowIdx] = 's';
             }
+        } else {
+            aiShips.push(ship);
+            continue;
         }
-    })
+    }
     console.log(aiBoard[2][5]);
     console.log(aiBoard.includes('s'));
     render();
@@ -235,7 +237,7 @@ function handleChooseShips(e) {
     document.getElementById('player-board').addEventListener('mouseover', (e) => {
         let square = e.target;
         square.style.backgroundColor = 'black';
-        let elAbove = document.getElementById(`c${square.id[1]}r${(parseInt(square.id[3]))+1}`);
+        let elAbove = document.getElementById(`c${square.id[1]}r${(parseInt(square.id[3])) + 1}`);
         console.log(elAbove);
         elAbove.style.backgroundColor = 'black';
     });
@@ -246,8 +248,8 @@ function handleChooseShips(e) {
         console.log(square)
         square.style.backgroundColor = '#42a4f5';
         console.log(square);
-        console.log(typeof(square.id[3]+1));
-        let elAbove = document.getElementById(`c${square.id[1]}r${(parseInt(square.id[3]))+1}`);
+        console.log(typeof (square.id[3] + 1));
+        let elAbove = document.getElementById(`c${square.id[1]}r${(parseInt(square.id[3])) + 1}`);
         console.log(elAbove);
         elAbove.style.backgroundColor = '#42a4f5';
     });
@@ -274,7 +276,7 @@ function handleMove(e) {
     }
     else if (shot === 's') {
         aiBoard[parseInt(square.id[1])][parseInt(square.id[3])] = 'h';
-        aiShipCount-= 1;
+        aiShipCount -= 1;
         playerLastMove = 'h';
     }
     turn *= -1;
@@ -286,17 +288,17 @@ function handleMove(e) {
 function aiMove() {
     //get random indexes for col and row arrays
     let shot, colIdx, rowIdx, randAdjShot;
-    const randColIdx = Math.floor(Math.random() * 9);
-    const randRowIdx = Math.floor(Math.random() * 9);
+    const randColIdx = getRandomBetween(0, 9);
+    const randRowIdx = getRandomBetween(0, 9);
     //ai will shoot at adjacent squares if their last move was a hit
     if (adjMoveCount > 4) lastMoveIsHit = false;
     if (lastMoveIsHit === true) {
         //random adjacent shots in four directions
         const randMoves = [
-            [aiLastMove[0]+1, aiLastMove[1]], 
-            [aiLastMove[0], aiLastMove[1]+1],
-            [aiLastMove[0]-1, aiLastMove[1]],
-            [aiLastMove[0], aiLastMove[1]-1]
+            [aiLastMove[0] + 1, aiLastMove[1]],
+            [aiLastMove[0], aiLastMove[1] + 1],
+            [aiLastMove[0] - 1, aiLastMove[1]],
+            [aiLastMove[0], aiLastMove[1] - 1]
         ]
         // const horShotRight = playerBoard[aiLastMove[0]+1][aiLastMove[1]];
         // const vertShotUp = playerBoard[aiLastMove[0]][aiLastMove[1]+1];
@@ -321,7 +323,7 @@ function aiMove() {
     shot = playerBoard[colIdx][rowIdx];
     if (shot === 'm' || shot === 'h') {
         return aiMove();
-    }    
+    }
     else if (shot === null) {
         playerBoard[colIdx][rowIdx] = 'm';
     }
@@ -330,12 +332,12 @@ function aiMove() {
         aiLastMove = [colIdx, rowIdx];
         lastMoveIsHit = true;
         adjMoveCount = 0;
-        playerShipCount-= 1;
+        playerShipCount -= 1;
     }
     console.log(adjMoveCount);
     render();
 }
-    
+
 
 
 function getWinner() {
@@ -352,8 +354,8 @@ function getWinner() {
     }
 }
 
-function getRandomNumber09() {
-    return Math.floor(Math.random() * 9);
+function getRandomBetween(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 
