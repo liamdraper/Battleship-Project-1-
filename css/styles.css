@@ -10,8 +10,99 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url("https://opengameart.org/sites/default/files/Preview_143.png");
+    background-image: url("Preview_143.png");
     background-size: 225vmin;
+}
+
+header {
+  font-weight: bold
+}
+
+#modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 200ms ease-in-out;
+  border-radius: 10px;
+  z-index: 10;
+  background-color: lightblue;
+  border: 1vmin solid black;
+  width: 70vmin;
+  height: 50vmin;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#modal.active {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#modal-title {
+  text-align: center; 
+  font-size: 8vmin;
+  font-weight: bold;
+}
+
+#modal-colors {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1vmin;
+}
+
+#modal-colors > div {
+  border: .5vmin solid black;
+  height: 10vmin;
+  width: 10vmin;
+}
+#modal-colors > div:hover {
+  border: .5vmin solid red;
+}
+
+#modal-colors > div:active {
+  border: .5vmin solid red;
+}
+
+#red {
+  background-color: #cf1111;
+}
+
+#blue {
+  background-color: blue;
+}
+
+#purple {
+  background-color: purple;
+}
+
+#green {
+  background-color: green;
+}
+
+#orange {
+  background-color: #f57d14;
+}
+
+#overlay {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /*background-color: rgba(0, 0, 0, .5);*/
+  pointer-events: none;
+  transition: 200ms ease-in-out;
+}
+
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
+} 
+
+#modal-button {
 }
 
 h2 {
@@ -72,6 +163,7 @@ main {
   } 
 
   #ai-board > div:hover {
+    cursor: pointer;
     background-color: #cf1111;
     transition: 0.05s;
   }
@@ -129,6 +221,7 @@ button {
   font-size: 3vmin;
   background-color: #f57d14;
   border: .2vmin solid white;
+  cursor: pointer;
 }
 
 button:hover {

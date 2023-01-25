@@ -6,6 +6,40 @@ const markers = {
     h: 'red-dot'
 }
 
+const closeModalButton = document.getElementById('modal-button');
+const modal = document.getElementById('modal');
+const overlay = document.getElementById('overlay');
+modal.classList.remove('active')
+closeModalButton.addEventListener('click', (e) => {
+    modal.classList.remove('active');
+    overlay.classList.remove('acitve');
+})
+
+const modalColors = document.getElementById('modal-colors')
+
+
+modalColors.addEventListener('click', (e) => {
+    color = e.target.id;
+    playerBoard.forEach(function (colArr, colIdx) {
+        colArr.forEach(function (cell, rowIdx) {
+            const square = document.querySelector(`#player-board #c${colIdx}r${rowIdx}`);
+            if (square === 's') cell.style.backgroundColor = color;
+        });
+    });
+    // [...document.getElementsByClassName('ship')].forEach(function(item) {
+    //     item.style.backgroundColor = color;
+    // })
+    // playerBoard.forEach(function (colArr, colIdx) {
+    //     colArr.forEach(function (cell, rowIdx) {
+    //         const square = document.querySelector(`#player-board #c${colIdx}r${rowIdx}`);
+    //         if (cell === 's') square.style.backgroundColor = color;
+
+    //     });
+    // });
+    
+})
+
+
 // const boardInfo = {
 //     playerBoard: 'player-board',
 //     aiBoard: 'ai-board'
@@ -27,14 +61,11 @@ const ships_length = {
     carrier: 5
 }
 
-const playerShips = [2, 3, 3, 4, 5];
-const aiShips = [2, 3, 3, 4, 5];
-
 /*----- state variables -----*/
 let playerShipCount, aiShipCount, turn, winner, playerBoard, aiBoard, gameStart, shipsPlaced, aiLastMove, lastMoveIsHit, adjMoveCount, playerLastMove;
 
 /*----- cached elements  -----*/
-const playAgnBtn = document.querySelector('button');
+const playAgnBtn = document.getElementById('play-again');
 const messageDisplay = document.querySelector('h1');
 const playerBoardSquares = [...document.querySelectorAll('#player-board > div')];
 const aiBoardSquares = [...document.querySelectorAll('#ai-board > div')];
@@ -105,6 +136,7 @@ function clearBoards() {
             square.removeAttribute('class');
         });
     });
+
 }
 
 function render() {
@@ -129,10 +161,10 @@ function renderAiBoard() {
     aiBoard.forEach(function (colArr, colIdx) {
         colArr.forEach(function (cell, rowIdx) {
             const square = document.querySelector(`#ai-board #c${colIdx}r${rowIdx}`);
-            square.classList.add(`${markers[cell]}`)
+            square.classList.add(`${markers[cell]}`);
             //hides ships until they are hit
-            //if (cell === 's') square.removeAttribute('class');
-            //if (cell === 'h') square.classList.add('ship', 'red-dot');
+            if (cell === 's') square.removeAttribute('class');
+            if (cell === 'h') square.classList.add('ship', 'red-dot');
         });
     });
 }
@@ -157,10 +189,11 @@ function renderMessage() {
 }
 
 function renderControls() {
-    //playAgnBtn.style.visibility = winner ? 'visible' : 'hidden';
+    playAgnBtn.style.visibility = winner ? 'visible' : 'hidden';
 }
 
 function playerChoosesShips() {
+    const playerShips = [2, 3, 3, 4, 5];
     while (playerShips.length) {
         const ship = playerShips.pop();
         //if (aiBoard.includes('s') === 17) return;
@@ -300,6 +333,7 @@ function playerChoosesShips() {
 // }
 
 function aiChoosesShips() {
+    const aiShips = [2, 3, 3, 4, 5];
     while (aiShips.length) {
         const ship = aiShips.pop();
         //if (aiBoard.includes('s') === 17) return;
@@ -409,8 +443,8 @@ function aiMove() {
     const randColIdx = getRandomBetween(0, 9);
     const randRowIdx = getRandomBetween(0, 9);
     //ai will shoot at adjacent squares if their last move was a hit
-    if (adjMoveCount > 4) lastMoveIsHit = false;
-    if (lastMoveIsHit === true) {
+    if (adjMoveCount > 5) lastMoveIsHit = false;
+    if (lastMoveIsHit) {
         //random adjacent shots in four directions
         const randMoves = [
             [aiLastMove[0] + 1, aiLastMove[1]],
@@ -418,11 +452,8 @@ function aiMove() {
             [aiLastMove[0] - 1, aiLastMove[1]],
             [aiLastMove[0], aiLastMove[1] - 1]
         ]
-        // const horShotRight = playerBoard[aiLastMove[0]+1][aiLastMove[1]];
-        // const vertShotUp = playerBoard[aiLastMove[0]][aiLastMove[1]+1];
-        // const horShotLeft = playerBoard[aiLastMove[0]+1][aiLastMove[1]];
-        // const vertShotDown = playerBoard[aiLastMove[0]][aiLastMove[1]+1];
-        randAdjShot = randMoves[Math.floor(Math.random() * 4)];
+        //picks random direction to attack
+        randAdjShot = randMoves[getRandomBetween(0, 3)];
         colIdx = randAdjShot[0];
         //horizonal guard
         if (colIdx === -1) colIdx = 0
@@ -438,6 +469,7 @@ function aiMove() {
         colIdx = randColIdx;
         rowIdx = randRowIdx;
     }
+    console.log(colIdx, rowIdx);
     shot = playerBoard[colIdx][rowIdx];
     if (shot === 'm' || shot === 'h') {
         return aiMove();
