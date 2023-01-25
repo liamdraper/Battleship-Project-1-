@@ -10,11 +10,41 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url(https://opengameart.org/sites/default/files/Preview_143.png);
+    background-image: url("https://opengameart.org/sites/default/files/Preview_143.png");
+    background-size: 225vmin;
+}
+
+h2 {
+  font-size:3vmin;
+}
+
+.player-turn, .ai-turn {
+  border-radius: 10%;
+  color: white;
+}
+
+.player-turn {
+  background-color: #42a4f5;
+  height: 5vmin;
+  width: 18vmin;
+}
+
+.ai-turn {
+  background-color: #eb4b4b;
+  height: 5vmin;
+  width: 22vmin;
 }
 
 header {
   font-size: 8vmin;
+}
+
+#turn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 80vmin;
+  font-size: 3vmin;
 }
 
 
@@ -29,10 +59,21 @@ main {
     grid-template-rows: repeat(10, 5vmin);
     margin-right: 5vmin;
     background-color: #42a4f5;
+    border: .5vmin solid black;
   }
 
-  #player-board > div {
-    border: .1vmin solid black;
+  #player-board > div, #ai-board > div {
+    border: .05vmin solid black;
+  }
+
+  #player-board > div:hover {
+    background-color: #1676c4;
+    transition: 0.05s;
+  } 
+
+  #ai-board > div:hover {
+    background-color: #cf1111;
+    transition: 0.05s;
   }
 
   #ai-board {
@@ -40,11 +81,8 @@ main {
     grid-template-columns: repeat(10, 5vmin);
     grid-template-rows: repeat(10, 5vmin);
     margin-left: 5vmin;
-    background-color: rgba(255, 0, 0, 0.6);
-  }
-
-  #ai-board > div {
-    border: .1vmin solid black;
+    background-color: #eb4b4b;
+    border: .5vmin solid black;
   }
 
   .red-dot,
@@ -76,13 +114,25 @@ main {
   background-color: grey;
   }
 
+
 .empty {
     content: '';
   }
 
-  #ships > div:hover {
+#ships > div:hover {
     border: .1vmin solid red;
-  }
+}
 
+button {
+  height: 5vmin;
+  width: 18vmin;
+  font-size: 3vmin;
+  background-color: #f57d14;
+  border: .2vmin solid white;
+}
 
-
+button:hover {
+  background-color: #3a75c2;
+  color: white;
+  transition: 0.1s;
+}

@@ -12,7 +12,7 @@ const markers = {
 // }
 
 const messages = {
-    null: '.',
+    null: 'Choose a square to shoot at',
     h: 'Hit!',
     m: 'Miss!',
     1: 'You win!',
@@ -27,6 +27,9 @@ const ships_length = {
     carrier: 5
 }
 
+const playerShips = [2, 3, 3, 4, 5];
+const aiShips = [2, 3, 3, 4, 5];
+
 /*----- state variables -----*/
 let playerShipCount, aiShipCount, turn, winner, playerBoard, aiBoard, gameStart, shipsPlaced, aiLastMove, lastMoveIsHit, adjMoveCount, playerLastMove;
 
@@ -35,6 +38,8 @@ const playAgnBtn = document.querySelector('button');
 const messageDisplay = document.querySelector('h1');
 const playerBoardSquares = [...document.querySelectorAll('#player-board > div')];
 const aiBoardSquares = [...document.querySelectorAll('#ai-board > div')];
+const playerTurnMessage = document.getElementById('player-turn');
+const aiTurnMessage = document.getElementById('ai-turn');
 
 /*----- event listeners -----*/
 document.getElementById('ai-board').addEventListener('click', handleMove);
@@ -46,11 +51,11 @@ init();
 
 function init() {
     playerBoard = [
-        [null, 's', 's', null, 's', 's', 's', null, null, null],
-        [null, 's', 's', 's', null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null],
-        [null, null, 's', 's', 's', 's', null, null, null, null],
-        [null, null, 's', 's', 's', 's', 's', null, null, null],
+        [null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null],
@@ -71,7 +76,7 @@ function init() {
     ];
     // Removes classes on all div elements
     clearBoards();
-    turn = 1;
+    turn;
     winner = null;
     playerShipCount = 17;
     aiShipCount = 17;
@@ -81,6 +86,7 @@ function init() {
     lastMoveIsHit = false;
     aiLastMove = [0, 0];
     adjMoveCount = 0;
+    playerTurnMessage.classList.add('player-turn');
     playerChoosesShips()
     aiChoosesShips();
     render();
@@ -139,51 +145,161 @@ function renderMessage() {
     else {
         //Game is still in play
         messageDisplay.innerHTML = messages[playerLastMove];
+        // if (turn = 'p') {
+        //     playerTurnMessage.classList.add('player-turn');
+        //     aiTurnMessage.classList.remove('ai-turn');
+        // }
+        // else if (turn = 'a'){
+        //     aiTurnMessage.classList.add('ai-turn');
+        //     playerTurnMessage.classList.remove('player-turn');
+        // }
     }
-
 }
 
 function renderControls() {
-    playAgnBtn.style.visibility = winner ? 'visible' : 'hidden';
+    //playAgnBtn.style.visibility = winner ? 'visible' : 'hidden';
 }
 
 function playerChoosesShips() {
-    //Player is in picking ships phase
-    if (shipsPlaced < 5) {
-        document.getElementById('ships').addEventListener('click', (e) => {
-            let ship = e.target;
-            //displays which ship is being targeted
-            ship.style.color = 'red';
-            //hovers over board
-            //adds elements above and below to hover according to which ship is selected
-            document.getElementById('player-board').addEventListener('mouseover', (e) => {
-                let square = e.target;
-                for (i = 0; i < ships_length[ship.id]; i++) {
-                    document.getElementById(`c${square.id[1]}r${(parseInt(square.id[3])) + i}`).style.backgroundColor = "black";
-                }
-            });
-            //sets non-hovered divs back to background color
-            document.getElementById('player-board').addEventListener('mouseout', (e) => {
-                let square = e.target;
-                square.style.backgroundColor = '#42a4f5';
-                //Won't reset all squares
-                for (i = 0; i < ships_length[ship.id]; i++) {
-                    document.getElementById(`c${square.id[1]}r${(parseInt(square.id[3])) + i}`).style.backgroundColor = "42a4f5";
-                }
-            });
-            //sets playerBoard value to 's'
-            document.getElementById('player-board').addEventListener('click', (e) => {
-                playerBoard[e.target.id[1]][e.target.id[3]] = 's';
-            });
-            shipsPlaced++;
-            render();
-        });
+    while (playerShips.length) {
+        const ship = playerShips.pop();
+        //if (aiBoard.includes('s') === 17) return;
+        //console.log(aiBoard.includes('s'));
+
+        //randomy chooses if alignment is vertical or horizontal
+        const vertAlign = Math.random() > 0.5;
+        //random number between 0 and 9
+        //vertically align a ship
+        //chooses random spaces to place ships
+        //Can't pick squares that arent null
+        const colIdx = getRandomBetween(0, 9);
+        const rowIdx = getRandomBetween(0, 9);
+        const square = playerBoard[colIdx][rowIdx];
+        //aiBoard[colIdx][rowIdx] = 's'
+        //console.log(square);
+        //console.log(colIdx, rowIdx);
+        let validPlacement = true;
+        for (i = 0; i < ship; i++) {
+            const newRowIdx = vertAlign ? rowIdx + i : rowIdx;
+            const newColIdx = vertAlign ? colIdx : colIdx + i;
+            //console.log(colIdx, newRowIdx);
+            if (newRowIdx > 9 || newColIdx > 9 || playerBoard[newColIdx][newRowIdx] === 's') {
+                validPlacement = false;
+                break;
+            }
+            //console.log(aiBoard[colIdx][rowIdx+ i])
+        }
+        if (validPlacement) {
+            for (i = 0; i < ship; i++) {
+                const newRowIdx = vertAlign ? rowIdx + i : rowIdx;
+                const newColIdx = vertAlign ? colIdx : colIdx + i;
+                playerBoard[newColIdx][newRowIdx] = 's';
+            }
+        } else {
+            playerShips.push(ship);
+            continue;
+        }
     }
-    return gameStart === true;
-}
+    render();
+};
+
+// function playerChoosesShips() {
+//          while (aiShips.length) {
+//             let ship, square, shot;
+//             document.getElementById('ships').addEventListener('click', (e) => {
+//                 console.log(e.target.id);
+//                 ship = e.target.id;
+//             });
+//             document.getElementById('player-board').addEventListener('click', (e) => {
+//                 square = e.target
+//                 shot = aiBoard[parseInt(square.id[1])][parseInt(square.id[3])];
+//             })
+//             const colIdx = 
+//             const rowIdx = 
+//             break;
+//         }
+// }
+
+
+// function playerChoosesShips() {
+//     while (ships_length.length) {
+//         const ship;
+//         document.getElementById('ships').addEventListener('click', (e) => ship = e.target);
+//         const vertAlign = Math.random() > 0.5;
+//         //random number between 0 and 9
+//         //vertically align a ship
+//         //chooses random spaces to place ships
+//         //Can't pick squares that arent null
+//         const colIdx = ship.id;
+//         const rowIdx = getRandomBetween(0, 9);
+//         const square = aiBoard[colIdx][rowIdx];
+//         //aiBoard[colIdx][rowIdx] = 's'
+//         //console.log(square);
+//         //console.log(colIdx, rowIdx);
+//         let validPlacement = true;
+//         for (i = 0; i < ship; i++) {
+//             const newRowIdx = vertAlign ? rowIdx + i : rowIdx;
+//             const newColIdx = vertAlign ? colIdx : colIdx + i;
+//             //console.log(colIdx, newRowIdx);
+//             if (newRowIdx > 9 || newColIdx > 9 || aiBoard[newColIdx][newRowIdx] === 's') {
+//                 validPlacement = false;
+//                 break;
+//             }
+//             //console.log(aiBoard[colIdx][rowIdx+ i])
+//         }
+//         if (validPlacement) {
+//             for (i = 0; i < ship; i++) {
+//                 const newRowIdx = vertAlign ? rowIdx + i : rowIdx;
+//                 const newColIdx = vertAlign ? colIdx : colIdx + i;
+//                 aiBoard[newColIdx][newRowIdx] = 's';
+//             }
+//         } else {
+//             aiShips.push(ship);
+//             continue;
+//         }
+//     }
+//     console.log(aiBoard[2][5]);
+//     console.log(aiBoard.includes('s'));
+//     render();
+// };
+// }
+
+// function playerChoosesShips() {
+//     //Player is in picking ships phase
+//         document.getElementById('ships').addEventListener('click', (e) => {
+//             let ship = e.target;
+//             //displays which ship is being targeted
+//             ship.style.color = 'red';
+//             const vertAlign = Math.random() > 0.5;
+//             //hovers over board
+//             //adds elements above and below to hover according to which ship is selected
+//             document.getElementById('player-board').addEventListener('mouseover', (e) => {
+//                 let square = e.target;
+//                 for (i = 0; i < ships_length[ship.id]; i++) {
+//                     document.getElementById(`c${parseInt(square.id[1])}r${(parseInt(square.id[3])) + i}`).style.backgroundColor = "black";
+//                 }
+//             });
+//             //sets non-hovered divs back to background color
+//             document.getElementById('player-board').addEventListener('mouseout', (e) => {
+//                 let square = e.target;
+//                 square.style.backgroundColor = '#42a4f5';
+//                 //Won't reset all squares
+//                 for (i = 0; i < ships_length[ship.id]; i++) {
+//                     console.log(square)
+//                     document.getElementById(`c${parseInt(square.id[1])}r${(parseInt(square.id[3]))+i}`).style.backgroundColor = "42a4f5";
+//                 }
+//             });
+//             //sets playerBoard value to 's'
+//             document.getElementById('player-board').addEventListener('click', (e) => {
+//                 playerBoard[e.target.id[1]][e.target.id[3]] = 's';
+//             });
+//             shipsPlaced++;
+//         });
+//     render();
+//     return gameStart = true;
+// }
 
 function aiChoosesShips() {
-    const aiShips = [2, 3, 3, 4, 5];
     while (aiShips.length) {
         const ship = aiShips.pop();
         //if (aiBoard.includes('s') === 17) return;
@@ -223,8 +339,6 @@ function aiChoosesShips() {
             continue;
         }
     }
-    console.log(aiBoard[2][5]);
-    console.log(aiBoard.includes('s'));
     render();
 };
 
@@ -262,6 +376,7 @@ function handleChooseShips(e) {
 }
 
 function handleMove(e) {
+    if (winner) return;
     //Player chooses a square to attack
     let shot;
     const square = e.target
@@ -279,13 +394,16 @@ function handleMove(e) {
         aiShipCount -= 1;
         playerLastMove = 'h';
     }
-    turn *= -1;
-    setTimeout(aiMove, 000);
+    aiTurnMessage.classList.add('ai-turn');
+    playerTurnMessage.classList.remove('player-turn');
+    setTimeout(aiMove, 1000);
     winner = getWinner();
     render();
 }
 
 function aiMove() {
+    playerTurnMessage.classList.add('player-turn');
+    aiTurnMessage.classList.remove('ai-turn');
     //get random indexes for col and row arrays
     let shot, colIdx, rowIdx, randAdjShot;
     const randColIdx = getRandomBetween(0, 9);
@@ -334,7 +452,6 @@ function aiMove() {
         adjMoveCount = 0;
         playerShipCount -= 1;
     }
-    console.log(adjMoveCount);
     render();
 }
 
