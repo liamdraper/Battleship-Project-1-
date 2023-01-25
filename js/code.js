@@ -2,7 +2,7 @@
 const markers = {
     null: 'empty',
     m: 'white-dot',
-    s: 'ship',
+    s: 'empty',
     h: 'red-dot'
 }
 
