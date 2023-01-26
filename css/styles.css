@@ -62,48 +62,46 @@ header {
   border: .5vmin solid red;
 }
 
-#modal-colors > div:active {
+#modal-colors div.active {
   border: .5vmin solid red;
 }
 
-#red {
+.red {
   background-color: #cf1111;
 }
 
-#blue {
+.blue {
   background-color: blue;
 }
 
-#purple {
+.purple {
   background-color: purple;
 }
 
-#green {
+.green {
   background-color: green;
 }
 
-#orange {
+.orange {
   background-color: #f57d14;
 }
 
 #overlay {
   position: fixed; 
+  opacity: 0;
+  transition: 200ms ease-in-out;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  /*background-color: rgba(0, 0, 0, .5);*/
+  background-color: rgba(0, 0, 0, .5);
   pointer-events: none;
-  transition: 200ms ease-in-out;
 }
 
 #overlay.active {
   opacity: 1;
   pointer-events: all;
 } 
-
-#modal-button {
-}
 
 h2 {
   font-size:3vmin;
