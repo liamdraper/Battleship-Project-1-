@@ -2,14 +2,8 @@
     box-sizing: border-box;
 }
 
-header {
-  font-weight: bold;
-  font-size: 10vmin;
-}
-
 body {
-    height: 100vh;
-    font-size: 3vmin;
+    height: 90vh;
     font-family: 'Bebas Neue', cursive;
     display: flex;
     flex-direction: column;
@@ -17,6 +11,16 @@ body {
     align-items: center;
     background-image: url("Preview_143.png");
     background-size: 225vmin;
+
+}
+
+header {
+  font-weight: bold;
+  margin-top: 5vmin;
+}
+
+h1 {
+  font-size: 6vmin;
 }
 
 #modal {
@@ -61,6 +65,7 @@ body {
 }
 #modal-colors > div:hover {
   border: .5vmin solid red;
+  cursor: pointer;
 }
 
 #modal-colors div.active {
@@ -156,14 +161,12 @@ main {
     border: .05vmin solid black;
   }
 
-  #player-board > div:hover {
-    background-color: #1676c4;
-    transition: 0.05s;
-  } 
-
   #ai-board > div:hover {
     cursor: pointer;
-    background-color: #cf1111;
+    transform: scale(1.1);
+    border: .3vmin solid black;
+    border-radius: 20%;
+    opacity: .8;
     transition: 0.05s;
   }
 
@@ -200,11 +203,6 @@ main {
 .white-dot::after {
     background-color: white;
   } 
-
-.ship {
-  background-color: grey;
-  }
-
 
 .empty {
     content: '';
