@@ -2,9 +2,14 @@
     box-sizing: border-box;
 }
 
+header {
+  font-weight: bold;
+  font-size: 10vmin;
+}
 
 body {
     height: 100vh;
+    font-size: 3vmin;
     font-family: 'Bebas Neue', cursive;
     display: flex;
     flex-direction: column;
@@ -12,11 +17,6 @@ body {
     align-items: center;
     background-image: url("Preview_143.png");
     background-size: 225vmin;
-}
-
-header {
-  font-weight: bold;
-  font-size: 50vmin;
 }
 
 #modal {

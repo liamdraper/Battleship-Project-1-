@@ -19,8 +19,6 @@ let playerShipCount, aiShipCount, winner, playerBoard, aiBoard, gameStart, ships
 /*----- cached elements  -----*/
 const playAgnBtn = document.getElementById('play-again');
 const messageDisplay = document.querySelector('h1');
-const playerBoardSquares = [...document.querySelectorAll('#player-board > div')];
-const aiBoardSquares = [...document.querySelectorAll('#ai-board > div')];
 const playerTurnMessage = document.getElementById('player-turn');
 const aiTurnMessage = document.getElementById('ai-turn');
 const closeModalButton = document.getElementById('modal-button');
@@ -38,8 +36,8 @@ closeModalButton.addEventListener('click', (e) => {
 modalColors.addEventListener('click', handleModalClick)
 
 /*----- functions -----*/
+closeModalButton.disabled = true;
 
-init();
 
 function init() {
     playerBoard = [
@@ -66,7 +64,6 @@ function init() {
         [null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null]
     ];
-    // Removes classes on all div elements
     clearBoards();
     winner = null;
     playerShipCount = 17;
@@ -77,8 +74,7 @@ function init() {
     lastMoveIsHit = false;
     aiLastMove = [0, 0];
     adjMoveCount = 0;
-    closeModalButton.disabled = true;
-    //Initializes player turn to player
+    if (Object.keys(markers).some((val) => val === 's')) closeModalButton.disabled = false;
     playerTurnMessage.classList.add('player-turn');
     playerChoosesShips()
     aiChoosesShips();
@@ -88,14 +84,11 @@ function init() {
 function handleModalClick(e) {
     const divs = document.querySelectorAll('#modal-colors div');
     divs.forEach(function(div) {
-        div.classList.remove('active')
+        div.classList.remove('active');
     })
     e.target.classList.add('active');
-    markers.s = e.target.classList[0]
-    console.log(markers)
-    //button is on until 
-    if (Object.keys(markers).some((val) => val === 's')) closeModalButton.disabled = false 
-    render();
+    markers.s = e.target.classList[0];
+    init();
 }
 
 function clearBoards() {
@@ -126,7 +119,9 @@ function renderPlayerBoard() {
     playerBoard.forEach(function (colArr, colIdx) {
         colArr.forEach(function (cell, rowIdx) {
             const square = document.querySelector(`#player-board #c${colIdx}r${rowIdx}`);
+            //if ()
             square.classList.add(`${markers[cell]}`);
+            
         });
     });
 }
