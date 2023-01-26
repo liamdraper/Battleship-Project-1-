@@ -15,7 +15,8 @@ body {
 }
 
 header {
-  font-weight: bold
+  font-weight: bold;
+  font-size: 50vmin;
 }
 
 #modal {

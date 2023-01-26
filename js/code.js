@@ -77,6 +77,8 @@ function init() {
     lastMoveIsHit = false;
     aiLastMove = [0, 0];
     adjMoveCount = 0;
+    closeModalButton.disabled = true;
+    //Initializes player turn to player
     playerTurnMessage.classList.add('player-turn');
     playerChoosesShips()
     aiChoosesShips();
@@ -91,6 +93,8 @@ function handleModalClick(e) {
     e.target.classList.add('active');
     markers.s = e.target.classList[0]
     console.log(markers)
+    //button is on until 
+    if (Object.keys(markers).some((val) => val === 's')) closeModalButton.disabled = false 
     render();
 }
 
@@ -376,3 +380,8 @@ function getRandomBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+
+
+function checkShipsSunk() {
+    
+}
