@@ -12,7 +12,7 @@ Player takes turns with computer to choose squares on the board to shoot at, try
 +HTML
 
 ## Getting Started
-[]
+[https://liamdraper.github.io/Battleship-Project-1-/ ]
 
 ## Next Steps:
 +Allow player to pick their ship placements on the board
