@@ -24,7 +24,7 @@ const aiTurnMessage = document.getElementById('ai-turn');
 const closeModalButton = document.getElementById('modal-button');
 const modal = document.getElementById('modal');
 const overlay = document.getElementById('overlay');
-const modalColors = document.querySelector('#modal-colors')
+const modalColors = document.querySelector('#modal-colors');
 
 /*----- event listeners -----*/
 document.getElementById('ai-board').addEventListener('click', handleMove);
@@ -212,7 +212,6 @@ function aiChoosesShips() {
 
 function handleMove(e) {
     if (winner) return;
-    if (e.target === NaN) return;
     if (ignoreClicks === true) return;
     let shot;
     const square = e.target
@@ -241,26 +240,25 @@ function handleMove(e) {
 function aiMove() {
     playerTurnMessage.classList.add('player-turn');
     aiTurnMessage.classList.remove('ai-turn');
+    const randMoves = [
+        [aiLastHit[0] + 1, aiLastHit[1]],
+        [aiLastHit[0], aiLastHit[1] + 1],
+        [aiLastHit[0] - 1, aiLastHit[1]],
+        [aiLastHit[0], aiLastHit[1] - 1]
+    ]
     let shot, colIdx, rowIdx, randAdjShot;
     const randColIdx = getRandomBetween(0, 9);
     const randRowIdx = getRandomBetween(0, 9);
     if (adjMoveCount > 4) lastMoveIsHit = false;
     if (lastMoveIsHit) {
-        const randMoves = [
-            [aiLastHit[0] + 1, aiLastHit[1]],
-            [aiLastHit[0], aiLastHit[1] + 1],
-            [aiLastHit[0] - 1, aiLastHit[1]],
-            [aiLastHit[0], aiLastHit[1] - 1]
-        ]
         randAdjShot = randMoves[getRandomBetween(0, 3)];
         colIdx = randAdjShot[0];
-        if (colIdx === -1) colIdx = 0
-        if (colIdx === 10) colIdx = 9
+        if (colIdx === -1) colIdx = 0;
+        if (colIdx === 10) colIdx = 9;
         rowIdx = randAdjShot[1];
-        if (rowIdx === -1) rowIdx = 0
-        if (rowIdx === 10) rowIdx = 9
+        if (rowIdx === -1) rowIdx = 0;
+        if (rowIdx === 10) rowIdx = 9;
         adjMoveCount++;
-        if (playerBoard[colIdx][rowIdx] === 'm' || playerBoard[colIdx][rowIdx] === 'h') return;
     }
     else {
         colIdx = randColIdx;
@@ -287,11 +285,9 @@ function aiMove() {
 
 function getWinner() {
     if (aiShipCount === 0) {
-        console.log('player has won');
         return winner = 1;
     }
     else if (playerShipCount === 0) {
-        console.log('Ai has won')
         return winner = -1;
     }
     else {

@@ -13,8 +13,8 @@ Player takes turns with computer to choose squares on the board to shoot at, try
 - HTML
 
 ## Getting Started
-[Deployed website](https://liamdraper.github.io/Battleship-Project-1-/)
-[Wikpedia article for Battleship](https://en.wikipedia.org/wiki/Battleship_(game))
+- [Deployed website](https://liamdraper.github.io/Battleship-Project-1-/)
+- [Wikpedia article for Battleship](https://en.wikipedia.org/wiki/Battleship_(game))
 
 To start the game, just pick the color you want for the ships and start shooting at enemy grid squares.
 
