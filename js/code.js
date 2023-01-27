@@ -14,7 +14,7 @@ const messages = {
 }
 
 /*----- state variables -----*/
-let playerShipCount, aiShipCount, winner, playerBoard, aiBoard, shipsPlaced, aiLastMove, lastMoveIsHit, adjMoveCount, playerLastMove, color, ignoreClicks;
+let playerShipCount, aiShipCount, winner, playerBoard, aiBoard, shipsPlaced, aiLastHit, lastMoveIsHit, adjMoveCount, playerLastMove, color, ignoreClicks;
 
 /*----- cached elements  -----*/
 const playAgnBtn = document.getElementById('play-again');
@@ -70,7 +70,7 @@ function init() {
     playerLastMove = null;
     shipsPlaced = 0;
     lastMoveIsHit = false;
-    aiLastMove = [0, 0];
+    aiLastHit = [0, 0];
     adjMoveCount = 0;
     if (Object.keys(markers).some((val) => val === 's')) closeModalButton.disabled = false;
     playerTurnMessage.classList.add('player-turn');
@@ -247,10 +247,10 @@ function aiMove() {
     if (adjMoveCount > 4) lastMoveIsHit = false;
     if (lastMoveIsHit) {
         const randMoves = [
-            [aiLastMove[0] + 1, aiLastMove[1]],
-            [aiLastMove[0], aiLastMove[1] + 1],
-            [aiLastMove[0] - 1, aiLastMove[1]],
-            [aiLastMove[0], aiLastMove[1] - 1]
+            [aiLastHit[0] + 1, aiLastHit[1]],
+            [aiLastHit[0], aiLastHit[1] + 1],
+            [aiLastHit[0] - 1, aiLastHit[1]],
+            [aiLastHit[0], aiLastHit[1] - 1]
         ]
         randAdjShot = randMoves[getRandomBetween(0, 3)];
         colIdx = randAdjShot[0];
@@ -260,12 +260,12 @@ function aiMove() {
         if (rowIdx === -1) rowIdx = 0
         if (rowIdx === 10) rowIdx = 9
         adjMoveCount++;
+        if (playerBoard[colIdx][rowIdx] === 'm' || playerBoard[colIdx][rowIdx] === 'h') return;
     }
     else {
         colIdx = randColIdx;
         rowIdx = randRowIdx;
     }
-    console.log(colIdx, rowIdx);
     shot = playerBoard[colIdx][rowIdx];
     if (shot === 'm' || shot === 'h') {
         return aiMove();
@@ -275,7 +275,7 @@ function aiMove() {
     }
     else if (shot === 's') {
         playerBoard[colIdx][rowIdx] = 'h';
-        aiLastMove = [colIdx, rowIdx];
+        aiLastHit = [colIdx, rowIdx];
         lastMoveIsHit = true;
         adjMoveCount = 0;
         playerShipCount -= 1;

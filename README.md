@@ -4,7 +4,7 @@ Player takes turns with computer to choose squares on the board to shoot at, try
 
 ## Screenshots
 ![alt text](/screenshots/startscreen.png)
-![alt text](/screenshots/screenshots/gameplayscreen.png)
+![alt text](/screenshots/gameplayscreen.png)
 ![alt text](/screenshots/winscreen.png)
 ## Technologies used:
 - JavaScript
@@ -17,3 +17,4 @@ Player takes turns with computer to choose squares on the board to shoot at, try
 ## Next Steps:
 - Allow player to pick their ship placements on the board
 - Display a message to the player whenever a ship is sunk
+- More advanced AI targeting system based on difficulty
